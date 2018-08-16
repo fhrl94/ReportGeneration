@@ -1,3 +1,6 @@
+import datetime
+import sys
+
 from django.core.validators import RegexValidator
 from django.db import models
 
@@ -38,3 +41,21 @@ class EmployeesInfo(models.Model):
     def __str__(self):
         return self.name
     pass
+
+def user_directory_path(instance, filename):
+    # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
+    return '{upload_to}/{filename}_{time}'.format(upload_to=sys.path[0] + '/upload/', filename=filename,
+                                                  time=datetime.datetime.today().strftime('%Y_%m_%d_%H_%M_%S'))
+
+class UploadHistory(models.Model):
+    # 表的结构:
+    # path_name = models.FileField('文件名称', upload_to=sys.path[0] + '/upload/%Y_%m_%d/%H', )
+    path_name = models.FileField('文件名称', upload_to=user_directory_path, )
+    upload_time = models.DateTimeField('上传时间', auto_now=True)
+
+    def __str__(self):
+        return str(self.id)
+
+    class Meta:
+        verbose_name = '报表自动生成文件上传'
+        verbose_name_plural = verbose_name

@@ -1,7 +1,7 @@
 import datetime
 
 
-class FilterRelation():
+class FilterRelation:
     greater_than = ('__gt', 'include')
     greater_than_or_equal = ('__gte', 'include')
     less_than = ('__lt', 'include')
@@ -19,7 +19,7 @@ actions_config = [
          {'sheet_name': '在职',
           'title_name_list': ['姓名', '部门', '组别', '性别', '级别', '入职日期', '转正日期', '虚拟入职日期', '入职时长', ],
           'col_filter':
-              {'公司名称':{FilterRelation().equal_to: ('百度推广', )},
+              {'公司名称': {FilterRelation().equal_to: ('百度推广', )},
                '部门': {FilterRelation().equal_to: ('客户发展部',)},
                '员工状态': {FilterRelation().equal_to: ('在职',)},
                             }
@@ -27,7 +27,7 @@ actions_config = [
          {'sheet_name': '休假',
           'title_name_list': ['姓名', '部门', '组别', '性别', '级别', '入职日期', '转正日期', '虚拟入职日期', '入职时长', ],
           'col_filter':
-              {'公司名称':{FilterRelation().equal_to: ('百度推广', )},
+              {'公司名称': {FilterRelation().equal_to: ('百度推广', )},
                '部门': {FilterRelation().equal_to: ('客户发展部',)},
                '员工状态': {FilterRelation().equal_to: ('休假',)},
           }
@@ -35,7 +35,7 @@ actions_config = [
          {'sheet_name': '离职',
           'title_name_list': ['姓名', '部门', '组别', '性别', '级别', '入职日期', '离职日期', ],
           'col_filter':
-              {'公司名称':{FilterRelation().equal_to: ('百度推广', )},
+              {'公司名称': {FilterRelation().equal_to: ('百度推广', )},
                '部门': {FilterRelation().equal_to: ('客户发展部',)},
                '员工状态': {FilterRelation().equal_to: ('离职',)},
                '离职日期': {
@@ -52,7 +52,7 @@ actions_config = [
              {'sheet_name': '在职',
               'title_name_list': ['姓名', '部门', '组别', '级别', '入职日期', ],
               'col_filter':
-                  {'公司名称':{FilterRelation().equal_to: ('百度推广', )},
+                  {'公司名称': {FilterRelation().equal_to: ('百度推广', )},
                    '部门': {FilterRelation().equal_to: ('百度本地广告事业部',)},
                    '员工状态': {FilterRelation().equal_to: ('在职',)},
               }
@@ -60,7 +60,7 @@ actions_config = [
              {'sheet_name': '休假',
               'title_name_list': ['姓名', '部门', '组别', '级别', '入职日期', ],
               'col_filter':
-                  {'公司名称':{FilterRelation().equal_to: ('百度推广', )},
+                  {'公司名称': {FilterRelation().equal_to: ('百度推广', )},
                    '部门': {FilterRelation().equal_to: ('百度本地广告事业部',)},
                    '员工状态': {FilterRelation().equal_to: ('休假',)},
               }
@@ -68,7 +68,7 @@ actions_config = [
              {'sheet_name': '离职',
               'title_name_list': ['姓名', '部门', '组别', '级别', '入职日期', '离职日期', ],
               'col_filter':
-                  {'公司名称':{FilterRelation().equal_to: ('百度推广', )},
+                  {'公司名称': {FilterRelation().equal_to: ('百度推广', )},
                    '部门': {FilterRelation().equal_to: ('百度本地广告事业部',)},
                    '员工状态': {FilterRelation().equal_to: ('离职',)},
               }
@@ -81,7 +81,7 @@ actions_config = [
              {'sheet_name': '在职',
               'title_name_list': ['姓名', '部门', '组别', '级别', '入职日期', '转正日期'],
               'col_filter':
-                  {'公司名称':{FilterRelation().equal_to: ('百度推广', )},
+                  {'公司名称': {FilterRelation().equal_to: ('百度推广', )},
                    '部门': {FilterRelation().equal_to: ('百度本地广告事业部',)},
                    '员工状态': {FilterRelation().equal_to: ('在职',)},
               }
@@ -92,55 +92,57 @@ actions_config = [
     {'workbook_name': '【推广】运营增值部人员名单',
          'sheet_list': [
              {'sheet_name': '在职',
-              'title_name_list': ['姓名', '部门', '组别', '性别', '级别', '入职日期', '转正日期', '毕业院校', '学历', '专业', '毕业时间',],
+              'title_name_list': ['姓名', '部门', '组别', '性别', '级别', '入职日期', '转正日期', '毕业院校', '学历',
+                                  '专业', '毕业时间', ],
               'col_filter':
-                  {'公司名称':{FilterRelation().equal_to: ('百度推广', )},
+                  {'公司名称': {FilterRelation().equal_to: ('百度推广', )},
                    '部门': {FilterRelation().equal_to: ('运营增值部',)},
                    '员工状态': {FilterRelation().equal_to: ('在职',)},
               }
               },
              {'sheet_name': '休假',
-              'title_name_list': ['姓名', '部门', '组别', '性别', '级别', '入职日期', '转正日期', '毕业院校', '学历', '专业', '毕业时间',],
+              'title_name_list': ['姓名', '部门', '组别', '性别', '级别', '入职日期', '转正日期', '毕业院校',
+                                  '学历', '专业', '毕业时间', ],
               'col_filter':
-                  {'公司名称':{FilterRelation().equal_to: ('百度推广', )},
+                  {'公司名称': {FilterRelation().equal_to: ('百度推广', )},
                    '部门': {FilterRelation().equal_to: ('运营增值部',)},
                    '员工状态': {FilterRelation().equal_to: ('休假',)},
               }
               },
              {'sheet_name': '离职',
-              'title_name_list': ['姓名', '部门', '组别', '性别', '级别', '入职日期', '离职日期',],
+              'title_name_list': ['姓名', '部门', '组别', '性别', '级别', '入职日期', '离职日期', ],
               'col_filter':
-                  {'公司名称':{FilterRelation().equal_to: ('百度推广', )},
+                  {'公司名称': {FilterRelation().equal_to: ('百度推广', )},
                    '部门': {FilterRelation().equal_to: ('运营增值部',)},
                    '员工状态': {FilterRelation().equal_to: ('离职',)},
               }
               },
          ]},
     # ——————————————————————————————————
-    # 5、【推广】客户发展部人员名单
-    {'workbook_name': '【推广】客户发展部人员名单',
+    # 5、【推广】客户发展部、大客户部人员名单
+    {'workbook_name': '【推广】客户发展部、大客户部人员名单',
          'sheet_list': [
              {'sheet_name': '在职',
               'title_name_list': ['姓名', '部门', '组别', '性别', '级别', '岗位', '入职日期', '转正日期', ],
               'col_filter':
-                  {'公司名称':{FilterRelation().equal_to: ('百度推广', )},
-                   '部门': {FilterRelation().equal_to: ('客户发展部',)},
+                  {'公司名称': {FilterRelation().equal_to: ('百度推广', )},
+                   '部门': {FilterRelation().equal_to: ('客户发展部', '大客户部', )},
                    '员工状态': {FilterRelation().equal_to: ('在职',)},
               }
               },
              {'sheet_name': '休假',
               'title_name_list': ['姓名', '部门', '组别', '性别', '级别', '岗位', '入职日期', '转正日期', ],
               'col_filter':
-                  {'公司名称':{FilterRelation().equal_to: ('百度推广', )},
-                   '部门': {FilterRelation().equal_to: ('客户发展部',)},
+                  {'公司名称': {FilterRelation().equal_to: ('百度推广', )},
+                   '部门': {FilterRelation().equal_to: ('客户发展部', '大客户部', )},
                    '员工状态': {FilterRelation().equal_to: ('休假',)},
               }
               },
              {'sheet_name': '离职',
               'title_name_list': ['姓名', '部门', '组别', '性别', '级别', '岗位', '入职日期', '转正日期', ],
               'col_filter':
-                  {'公司名称':{FilterRelation().equal_to: ('百度推广', )},
-                   '部门': {FilterRelation().equal_to: ('客户发展部',)},
+                  {'公司名称': {FilterRelation().equal_to: ('百度推广', )},
+                   '部门': {FilterRelation().equal_to: ('客户发展部', '大客户部', )},
                    '员工状态': {FilterRelation().equal_to: ('离职',)},
               }
               },
@@ -195,7 +197,7 @@ actions_config = [
               'col_filter':
                   {'公司名称': {FilterRelation().equal_to: ('百捷集团', '百度推广', '信息科技', '盛世百捷')},
                    '员工状态': {FilterRelation().equal_to: ('离职',)},
-                   '入职日期': {
+                   '离职日期': {
                        FilterRelation.greater_than_or_equal: (
                       (datetime.datetime.now().replace(day=1) + datetime.timedelta(days=-1)).replace(day=1),),
                       FilterRelation.less_than: (datetime.datetime.now().replace(day=1),),
@@ -204,14 +206,15 @@ actions_config = [
               },
          ]},
     # ——————————————————————————————————
-    # 8、【推广】百推客服体系人员名单
-    {'workbook_name': '【推广】百推客服体系人员名单',
+    # 8、【推广】百推人员名单
+    {'workbook_name': '【推广】百推人员名单',
          'sheet_list': [
              {'sheet_name': '在职',
               'title_name_list': ['姓名', '部门', '组别', '性别', '级别', '入职日期', '转正日期', '毕业院校', '学历', '专业', '毕业时间', ],
               'col_filter':
                   {'公司名称': {FilterRelation().equal_to: ('百度推广', )},
-                   '部门': {FilterRelation().equal_to: ('运营增值部', '百度本地广告事业部', '地市拓展部', '产品运营部', )},
+                   '部门': {FilterRelation().equal_to: ('运营增值部', '百度本地广告事业部', '地市拓展部', '业务运营部',
+                                                      '运营支持中心', )},
                    '员工状态': {FilterRelation().equal_to: ('在职',)},
               }
               },
@@ -219,7 +222,8 @@ actions_config = [
               'title_name_list': ['姓名', '部门', '组别', '性别', '级别', '入职日期', '转正日期', '毕业院校', '学历', '专业', '毕业时间', ],
               'col_filter':
                   {'公司名称': {FilterRelation().equal_to: ('百捷集团', '百度推广', '信息科技', '盛世百捷')},
-                   '部门': {FilterRelation().equal_to: ('运营增值部', '百度本地广告事业部', '地市拓展部', '产品运营部', )},
+                   '部门': {FilterRelation().equal_to: ('运营增值部', '百度本地广告事业部', '地市拓展部', '业务运营部',
+                                                      '运营支持中心', )},
                    '员工状态': {FilterRelation().equal_to: ('休假',)},
               }
               },
@@ -227,7 +231,8 @@ actions_config = [
               'title_name_list': ['姓名', '部门', '组别', '性别', '级别', '入职日期', '离职日期', ],
               'col_filter':
                   {'公司名称': {FilterRelation().equal_to: ('百捷集团', '百度推广', '信息科技', '盛世百捷')},
-                   '部门': {FilterRelation().equal_to: ('运营增值部', '百度本地广告事业部', '地市拓展部', '产品运营部', )},
+                   '部门': {FilterRelation().equal_to: ('运营增值部', '百度本地广告事业部', '地市拓展部', '业务运营部',
+                                                      '运营支持中心', )},
                    '员工状态': {FilterRelation().equal_to: ('离职',)},
               }
               },
@@ -287,21 +292,21 @@ actions_config = [
     {'workbook_name': '【推广】百度推广最新人员名册',
          'sheet_list': [
              {'sheet_name': '推广（含远郊）在职',
-              'title_name_list': ['工号', '姓名', '部门', '组别', '性别', '级别', '入职日期', '转正日期', '身份证号',  ],
+              'title_name_list': ['工号', '姓名', '部门', '组别', '性别', '级别', '入职日期', '转正日期', '身份证号', ],
               'col_filter':
                   {'公司名称': {FilterRelation().equal_to: ('百度推广', )},
                    '员工状态': {FilterRelation().equal_to: ('在职',)},
               }
               },
              {'sheet_name': '推广（含远郊）休假',
-              'title_name_list': ['工号', '姓名', '部门', '组别', '性别', '级别', '入职日期', '转正日期', '身份证号',  ],
+              'title_name_list': ['工号', '姓名', '部门', '组别', '性别', '级别', '入职日期', '转正日期', '身份证号', ],
               'col_filter':
                   {'公司名称': {FilterRelation().equal_to: ('百度推广',)},
                    '员工状态': {FilterRelation().equal_to: ('休假',)},
               }
               },
              {'sheet_name': '推广（含远郊）离职',
-              'title_name_list': ['工号', '姓名', '部门', '组别', '性别', '级别', '入职日期', '离职日期', '身份证号',  ],
+              'title_name_list': ['工号', '姓名', '部门', '组别', '性别', '级别', '入职日期', '离职日期', '身份证号', ],
               'col_filter':
                   {'公司名称': {FilterRelation().equal_to: ('百度推广', )},
                    '员工状态': {FilterRelation().equal_to: ('离职',)},
@@ -313,7 +318,7 @@ actions_config = [
     {'workbook_name': '【集团各公司】{year}年Q{num}季度生日名单'.format(year=datetime.datetime.now().year,
                                                           num=int(datetime.datetime.now().month/3) + 1),
          'sheet_list': [
-             {'sheet_name': '推广（含远郊）在职',
+             {'sheet_name': '推广（含远郊）在职、休假',
               'title_name_list': ['姓名', '部门', '组别', '性别', '级别', '岗位', '出生年月', '联系方式', '月份', ],
               'col_filter':
                   {'公司名称': {FilterRelation().equal_to: ('百度推广', )},
@@ -325,7 +330,7 @@ actions_config = [
                    }
               }
               },
-             {'sheet_name': '集团在职',
+             {'sheet_name': '集团在职、休假',
               'title_name_list': ['姓名', '部门', '组别', '性别', '级别', '岗位', '出生年月', '联系方式', '月份', ],
               'col_filter':
                   {'公司名称': {FilterRelation().equal_to: ('百捷集团',)},
@@ -337,7 +342,7 @@ actions_config = [
                    }
               }
               },
-             {'sheet_name': '信息科技在职',
+             {'sheet_name': '信息科技在职、休假',
               'title_name_list': ['姓名', '部门', '组别', '性别', '级别', '岗位', '出生年月', '联系方式', '月份', ],
               'col_filter':
                   {'公司名称': {FilterRelation().equal_to: ('信息科技', )},
@@ -349,7 +354,7 @@ actions_config = [
                    }
               }
               },
-             {'sheet_name': '盛世百捷在职',
+             {'sheet_name': '盛世百捷在职、休假',
               'title_name_list': ['姓名', '部门', '组别', '性别', '级别', '岗位', '出生年月', '联系方式', '月份', ],
               'col_filter':
                   {'公司名称': {FilterRelation().equal_to: ('盛世百捷', )},
@@ -426,16 +431,19 @@ actions_config = [
     # 13、【信息科技】信息科技员工花名册
     {'workbook_name': '【信息科技】信息科技员工花名册', 'sheet_list': [
         {'sheet_name': '在职',
-         'title_name_list': ['工号', '姓名', '部门', '组别', '性别', '级别', '岗位', '入职日期', '转正日期', '身份证号', '联系方式',],
+         'title_name_list': ['工号', '姓名', '部门', '组别', '性别', '级别', '岗位', '入职日期', '转正日期',
+                             '身份证号', '联系方式', ],
          'col_filter': {'公司名称': {FilterRelation().equal_to: ('信息科技',)},
                         '员工状态': {FilterRelation().equal_to: ('在职', )},
                         }},
         {'sheet_name': '休假',
-         'title_name_list': ['工号', '姓名', '部门', '组别', '性别', '级别', '岗位', '入职日期', '转正日期', '身份证号', '联系方式',],
+         'title_name_list': ['工号', '姓名', '部门', '组别', '性别', '级别', '岗位', '入职日期', '转正日期',
+                             '身份证号', '联系方式', ],
          'col_filter': {'公司名称': {FilterRelation().equal_to: ('信息科技',)},
                         '员工状态': {FilterRelation().equal_to: ('休假',)}, }},
         {'sheet_name': '离职',
-         'title_name_list': ['工号', '姓名', '部门', '组别', '性别', '级别', '岗位', '入职日期', '转正日期', '离职日期', '身份证号', '联系方式',],
+         'title_name_list': ['工号', '姓名', '部门', '组别', '性别', '级别', '岗位', '入职日期', '转正日期',
+                             '离职日期', '身份证号', '联系方式', ],
          'col_filter': {'公司名称': {FilterRelation().equal_to: ('信息科技',)},
                         '员工状态': {FilterRelation().equal_to: ('离职', )},
                         }},
@@ -485,25 +493,25 @@ actions_config = [
                         '员工状态': {FilterRelation().equal_to: ('在职', '休假')},
                         '级别': {FilterRelation().like: ('总监', '总经理', '总裁', '董事')},
                         }},
-        {'sheet_name': '集团在职',
+        {'sheet_name': '集团在职、休假',
          'title_name_list': ['姓名', '部门', '组别', '级别', '入职日期', ],
          'col_filter': {'公司名称': {FilterRelation().equal_to: ('百捷集团',)},
                         '员工状态': {FilterRelation().equal_to: ('在职', '休假')},
                         '级别': {FilterRelation().not_in_like: ('总监', '总经理', '总裁', '董事')},
                         }},
-        {'sheet_name': '推广在职',
+        {'sheet_name': '推广在职、休假',
          'title_name_list': ['姓名', '部门', '组别', '级别', '入职日期', ],
          'col_filter': {'公司名称': {FilterRelation().equal_to: ('百度推广',)},
                         '员工状态': {FilterRelation().equal_to: ('在职', '休假')},
                         '级别': {FilterRelation().not_in_like: ('总监', '总经理', '总裁', '董事')},
                         }},
-        {'sheet_name': '信息科技在职',
+        {'sheet_name': '信息科技在职、休假',
          'title_name_list': ['姓名', '部门', '组别', '级别', '入职日期', ],
          'col_filter': {'公司名称': {FilterRelation().equal_to: ('信息科技',)},
                         '员工状态': {FilterRelation().equal_to: ('在职', '休假')},
                         '级别': {FilterRelation().not_in_like: ('总监', '总经理', '总裁', '董事')},
                         }},
-        {'sheet_name': '盛世百捷在职',
+        {'sheet_name': '盛世百捷在职、休假',
          'title_name_list': ['姓名', '部门', '组别', '级别', '入职日期', ],
          'col_filter': {'公司名称': {FilterRelation().equal_to: ('盛世百捷',)},
                         '员工状态': {FilterRelation().equal_to: ('在职', '休假')},

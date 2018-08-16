@@ -9,9 +9,9 @@ from xadmin.plugins.utils import get_context_dict
 from xadmin.views import CommAdminView, BaseAdminPlugin, filter_hook
 
 # 继承BaseAdminPlugin类
-from report_generation.models import EmployeesInfo
+from report_generation.models import EmployeesInfo, UploadHistory
 from report_generation.resources import EmployeesInfoResource
-from report_generation.views import xadmin_set_selected, download_file
+from report_generation.views import xadmin_set_selected, download_file, load_data
 from resource_python.constants import actions_config
 
 
@@ -46,31 +46,33 @@ def get_actions():
     return actions
 
 
-class avs(BaseActionView):
-    action_name = '123'
-    description = '456'
-
-    def do_action(self, queryset):
-        return download_file(sys.path[0] + '/report_generation/tmp/' + '【推广】客户发展部员工名册' + '.xls',
-                             '【推广】客户发展部员工名册', 'xls')
-        pass
-    pass
-
 @xadmin.sites.register(EmployeesInfo)
 class EmployeeInfoAdmin(object):
     import_export_args = {'import_resource_class': EmployeesInfoResource, }
-    list_display = ('name', 'code', 'company', 'department', 'group', 'gender', 'level', 'entry_date',
-                    'dimission_date', 'division_date', 'emp_positive_date', 'graduate_institutions',
-                    'education_background', 'emp_profession', 'graduate_date', 'emp_position', 'birth_date',
-                    'id_card_num', 'emp_tel', 'emp_status',)
+    list_display = ('name', 'code', 'company', 'department', 'group', 'gender', 'level', 'entry_date', 'dimission_date',
+                    'division_date', 'emp_positive_date', 'graduate_institutions', 'education_background',
+                    'emp_profession', 'graduate_date', 'emp_position', 'birth_date', 'id_card_num', 'emp_tel',
+                    'emp_status',)
     list_filter = ('company', 'department', 'emp_status', 'dimission_date', 'entry_date', 'birth_date')
     search_fields = ('name', 'code',)
     ordering = ('code',)
-    # actions = get_actions()
-    actions = [avs,]
+    actions = get_actions()  # actions = [avs,]
 
 
+@xadmin.sites.register(UploadHistory)
+class UploadHistoryAdmin(object):
+    list_display = ('id', 'path_name', 'upload_time',)
+    exclude = []
+    actions = ['admin_loading_init', ]
 
+    def admin_loading_init(self, request, queryset):
+        # 数据初始化
+        assert len(queryset) == 1, "只允许选择一个"
+        load_data(str(queryset[0].path_name))
+        pass
+
+    admin_loading_init.short_description = '读取数据'
+    pass
 
 
 class GlobalSetting(object):
@@ -81,4 +83,3 @@ class GlobalSetting(object):
 
 
 xadmin.site.register(CommAdminView, GlobalSetting)
-

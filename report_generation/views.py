@@ -3,22 +3,19 @@ import os
 import sys
 import time
 
-import xlsxwriter
+import xlrd
 import xlwt
 from django.db.models import Q
-from django.http import StreamingHttpResponse
-from django.shortcuts import render
-
+from django.http import HttpResponse
 # Create your views here.
 from django.utils.http import urlquote
 from django.utils.translation import ugettext_lazy
 
 from report_generation.models import EmployeesInfo
-from resource_python.constants import actions_config
+from resource_python.data_pull import export_list_title, data_validation, export_list_column
 
 
 class SheetOptions():
-
     export_dict_title = {'姓名': 'name', '工号': 'code', '公司名称': 'company', '部门': 'department', '组别': 'group',
                          '性别': 'gender', '级别': 'level', '入职日期': 'entry_date', '离职日期': 'dimission_date',
                          '虚拟入职日期': 'division_date', '转正日期': 'emp_positive_date', '毕业院校': 'graduate_institutions',
@@ -30,12 +27,12 @@ class SheetOptions():
         assert isinstance(sheet_filter_relation, dict), "必须使用字典类型"
         for one in sheet_title_name:
             if one not in self.export_dict_title.keys():
-                raise UserWarning("不存在表头 {one}，请在 {list} 中选择".format(one=one,
-                    list='、'.join(self.export_dict_title.keys())))
+                raise UserWarning(
+                    "不存在表头 {one}，请在 {list} 中选择".format(one=one, list='、'.join(self.export_dict_title.keys())))
         for row_name, row_name_value in sheet_filter_relation.items():
             if row_name not in self.export_dict_title.keys():
-                raise UserWarning("不存在过滤列 {one}，请在 {list} 中选择".format(one=row_name,
-                    list='、'.join(self.export_dict_title.keys())))
+                raise UserWarning(
+                    "不存在过滤列 {one}，请在 {list} 中选择".format(one=row_name, list='、'.join(self.export_dict_title.keys())))
             # if isinstance(row_name_value[0], FilterRelation) is False:
             #     # TODO 遍历类属性
             #     print(123)
@@ -48,7 +45,6 @@ class SheetOptions():
             self.sheet_title_name = sheet_title_name
             # 过滤条件关系为 字典 {row_name: (options, (result...))}
             self.sheet_filter_relation = sheet_filter_relation
-
 
     #  筛选数据
     def date_filter(self):
@@ -78,6 +74,7 @@ class SheetOptions():
         # TODO 数据测试
         return EmployeesInfo.objects.filter(filter_list).values_list(*sheet_title_name_list)
         pass
+
     pass
 
     #
@@ -114,7 +111,6 @@ class WorkSheetWrite:
                               '学历': left_horz_style, '专业': left_horz_style, '毕业时间': general_style,
                               '岗位': left_horz_style, '出生年月': date_style, '身份证号': general_style, '联系方式': general_style,
                               '员工状态': general_style, '月份': general_style, '入职时长': left_horz_style, }
-
 
     # self.sheet_ins 有多个，
     def __init__(self, workbook_name):
@@ -177,13 +173,16 @@ def set_selected(workbook_conf_ins):
         for one_sheet in workbook_conf_ins['sheet_list']:
             work_sheet_write_ins.title_name_write(one_sheet['sheet_name'], one_sheet['title_name_list'])
             work_sheet_write_ins.title_data_write(one_sheet['sheet_name'], SheetOptions(one_sheet['title_name_list'],
-                                                                     one_sheet['col_filter']).date_filter())
+                                                                                        one_sheet[
+                                                                                            'col_filter']).date_filter())
             work_sheet_write_ins.save()
         return download_file(sys.path[0] + '/report_generation/tmp/' + workbook_conf_ins['workbook_name'] + '.xls',
                              workbook_conf_ins['workbook_name'], 'xls')
+
     set_reload.short_description = ugettext_lazy(u"{name}表下载".format(name=workbook_conf_ins['workbook_name']))
     set_reload.__name__ = u"{name}表下载".format(name=workbook_conf_ins['workbook_name'])
     return set_reload
+
 
 def xadmin_set_selected(workbook_conf_ins):
     # 对应 do_action 函数
@@ -193,20 +192,23 @@ def xadmin_set_selected(workbook_conf_ins):
         for one_sheet in workbook_conf_ins['sheet_list']:
             work_sheet_write_ins.title_name_write(one_sheet['sheet_name'], one_sheet['title_name_list'])
             work_sheet_write_ins.title_data_write(one_sheet['sheet_name'], SheetOptions(one_sheet['title_name_list'],
-                                                                     one_sheet['col_filter']).date_filter())
+                                                                                        one_sheet[
+                                                                                            'col_filter']).date_filter())
             work_sheet_write_ins.save()
         return download_file(sys.path[0] + '/report_generation/tmp/' + workbook_conf_ins['workbook_name'] + '.xls',
-                     workbook_conf_ins['workbook_name'], 'xls')
+                             workbook_conf_ins['workbook_name'], 'xls')
+
     set_reload.short_description = ugettext_lazy(u"{name}表下载".format(name=workbook_conf_ins['workbook_name']))
     set_reload.__name__ = u"{name}表下载".format(name=workbook_conf_ins['workbook_name'])
     return set_reload
+
 
 def clear_temp():
     """
     清除上次生产的文件
     :return:
     """
-    temp_dir_list = ['/report_generation/tmp/',]
+    temp_dir_list = ['/report_generation/tmp/', ]
     for one in temp_dir_list:
         if not os.path.exists(sys.path[0] + one):
             os.mkdir(sys.path[0] + one)
@@ -239,7 +241,9 @@ def download_file(file_path_name, download_file_name, category):
     :param category: 下载的类型
     :return:
     """
-    response = StreamingHttpResponse(file_iterator(file_path_name))
+    # response = StreamingHttpResponse(file_iterator(file_path_name))
+    # xadmin 不支持 StreamingHttpResponse
+    response = HttpResponse(file_iterator(file_path_name))
     response['Content-Type'] = 'application/octet-stream'
     response['Content-Disposition'] = 'attachment;filename="{name}{now}.{category}"'.format(
         name=urlquote(download_file_name), now=(time.strftime('%Y-%m-%d_%H-%M-%S', time.localtime(time.time()))),
@@ -247,4 +251,57 @@ def download_file(file_path_name, download_file_name, category):
     return response
 
 
+def load_data(path_name):
+    # export_list_title
+    sheet_name = xlrd.open_workbook(filename=path_name).sheet_by_name('人员名单')
+    EmployeesInfo.objects.all().delete()
+    EmployeesInfo.objects.bulk_create(read_excel_sheet(sheet_name))
+    pass
 
+
+def read_excel_sheet(sheet_name):
+    """
+
+    :param sheet_name:
+    :return: 花名册中的每一列生成为 EmployeesInfo 对象的列表
+    """
+    #  判断每个 sheet 标题栏的行号 title_base
+    #  依据要生成的 标题 栏的名称， 获取 索引 index 的位置，不存在则为空
+    #  按照索引，写入新的excel中
+    export_dict_title_index = {}
+    title_row_index = None
+    # 确定 title_row_index
+    for row_index in range(sheet_name.nrows):
+        for col_index in range(sheet_name.ncols):
+            if sheet_name.cell_value(row_index, col_index) == export_list_title[0]:
+                # print(sheet_name.cell_value(row_index, col_index), row_index, col_index)
+                title_row_index = row_index
+                break
+    # 确定索引位置
+    for col_index in range(sheet_name.ncols):
+        if sheet_name.cell_value(title_row_index, col_index) in export_list_title:
+            export_dict_title_index[sheet_name.cell_value(title_row_index, col_index)] = col_index
+    print(export_dict_title_index)
+    # 输入数据
+    data_ins_list = []
+    for row_index in range(title_row_index + 1, sheet_name.nrows):
+        data_list = []
+        # 数据验证
+        for one in export_list_title:
+            if sheet_name.cell_value(row_index, export_dict_title_index['姓名']) == '':
+                continue
+            if not (export_dict_title_index.get(one, None) is None):
+                data_list.append(sheet_name.cell_value(row_index, export_dict_title_index[one]))
+            else:
+                raise UserWarning("列标题{name}必须包含{column}".format(name=one, column="、".join(export_list_title)))
+        # 数据验证
+        data_ins_list.append(create_employees_info_ins(data_validation(data_list)))
+    return data_ins_list
+    pass
+
+
+def create_employees_info_ins(data_list):
+    emp_ins = EmployeesInfo()
+    for index, column in enumerate(data_list):
+        setattr(emp_ins, export_list_column[index]['db_name'], column)
+    return emp_ins
