@@ -159,7 +159,7 @@ class WorkSheetWrite:
 
     def save(self):
         print(os.path.basename(self._workbook_name))
-        file_path = sys.path[0] + os.path.sep + 'report_generation\\tmp'
+        file_path = sys.path[0] + os.path.sep + 'report_generation/tmp'
         if os.path.exists(file_path) is False:
             os.mkdir(file_path)
         self.workbook_ins.save(file_path + os.path.sep + os.path.basename(self._workbook_name) + '.xls')
