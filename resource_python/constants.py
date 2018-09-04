@@ -86,6 +86,14 @@ actions_config = [
                    '员工状态': {FilterRelation().equal_to: ('在职',)},
               }
               },
+             {'sheet_name': '休假',
+              'title_name_list': ['姓名', '部门', '组别', '级别', '入职日期', '转正日期'],
+              'col_filter':
+                  {'公司名称': {FilterRelation().equal_to: ('百度推广', )},
+                   '部门': {FilterRelation().equal_to: ('百度本地广告事业部',)},
+                   '员工状态': {FilterRelation().equal_to: ('休假',)},
+              }
+              },
          ]},
     # ——————————————————————————————————
     # 4、【推广】运营增值部人员名单
