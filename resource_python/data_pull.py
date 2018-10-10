@@ -39,7 +39,7 @@ class ExcelColumnStructure:
         """
         # 空类型 不检查
         if value is None or value == "":
-            if self.is_null is None:
+            if not self.is_null:
                 raise UserWarning("数据列 {name} 不能为空".format(name=self.name))
             return None
         else:
