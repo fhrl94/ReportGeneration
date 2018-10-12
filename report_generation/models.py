@@ -59,3 +59,49 @@ class UploadHistory(models.Model):
     class Meta:
         verbose_name = '报表自动生成文件上传'
         verbose_name_plural = verbose_name
+
+
+class WorkbookInfo(models.Model):
+
+    workbook_name = models.CharField(verbose_name="报表名称", max_length=50)
+    # TODO 需要标记收件人备注信息
+    receiver = models.CharField(verbose_name="收件人", max_length=255)
+    cc = models.CharField(verbose_name="抄送人", max_length=255)
+    send_time = models.DateField("发送时间")
+    # TODO 发送频次
+
+    def __str__(self):
+        return str(self.workbook_name)
+
+    class Meta:
+        verbose_name = '报表展示'
+        verbose_name_plural = verbose_name
+
+class SheetInfo(models.Model):
+    sheet_name = models.CharField(verbose_name="sheet 名称", max_length=50)
+    column_name_list = models.CharField(verbose_name="列名称", max_length=300)
+    workbook_ins = models.ForeignKey(WorkbookInfo, on_delete=models.CASCADE, verbose_name='报表名称')
+
+    def __str__(self):
+        return str(self.sheet_name)
+
+    class Meta:
+        verbose_name = 'Sheet 展示'
+        verbose_name_plural = verbose_name
+
+
+class FilterColInfo(models.Model):
+
+    filter_col = models.CharField(verbose_name="列名称", max_length=30)
+    #   数据校验 或 使用 choices
+    filter_relation = models.CharField(verbose_name="过滤关系", max_length=30)
+    condition_list = models.CharField(verbose_name="条件列表", max_length=255)
+    sheet_ins = models.ForeignKey(SheetInfo, on_delete=models.CASCADE, verbose_name='报表名称')
+
+    def __str__(self):
+        return str(self.filter_col)
+
+    class Meta:
+        verbose_name = '筛选条件 展示'
+        verbose_name_plural = verbose_name
+    pass

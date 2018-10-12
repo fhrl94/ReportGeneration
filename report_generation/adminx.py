@@ -1,17 +1,16 @@
-import sys
-
 import xadmin
-from django.shortcuts import redirect
+from django.core import urlresolvers
 from django.template import loader
 from django.urls import reverse
+from xadmin import views
 from xadmin.plugins.actions import BaseActionView
 from xadmin.plugins.utils import get_context_dict
-from xadmin.views import CommAdminView, BaseAdminPlugin, filter_hook
+from xadmin.views import CommAdminView, BaseAdminPlugin
 
 # 继承BaseAdminPlugin类
-from report_generation.models import EmployeesInfo, UploadHistory
+from report_generation.models import EmployeesInfo, UploadHistory, WorkbookInfo, SheetInfo, FilterColInfo
 from report_generation.resources import EmployeesInfoResource
-from report_generation.views import xadmin_set_selected, download_file, load_data
+from report_generation.views import xadmin_set_selected, load_data
 from resource_python.constants import actions_config
 
 
@@ -57,6 +56,7 @@ class EmployeeInfoAdmin(object):
     search_fields = ('name', 'code',)
     ordering = ('code',)
     actions = get_actions()  # actions = [avs,]
+    model_icon = 'fa fa-book'
 
 
 @xadmin.sites.register(UploadHistory)
@@ -75,11 +75,56 @@ class UploadHistoryAdmin(object):
     pass
 
 
+@xadmin.sites.register(WorkbookInfo)
+class WorkbookInfoAdmin(object):
+    # list_display = ('id', 'path_name', 'upload_time',)
+    # exclude = []
+    # actions = ['admin_loading_init', ]
+
+    pass
+
+
+@xadmin.sites.register(SheetInfo)
+class SheetInfoAdmin(object):
+    # list_display = ('id', 'path_name', 'upload_time',)
+    # exclude = []
+    # actions = ['admin_loading_init', ]
+
+    pass
+
+
+@xadmin.sites.register(FilterColInfo)
+class FilterColInfoAdmin(object):
+    # list_display = ('id', 'path_name', 'upload_time',)
+    # exclude = []
+    # actions = ['admin_loading_init', ]
+
+    pass
+
+
 class GlobalSetting(object):
-    # 设置base_site.html的Title
+    # 修改title
     site_title = '报表生成'
-    # 设置base_site.html的Footer
+    # 修改footer
     site_footer = '报表生成处理平台'
+    # 收起菜单
+    menu_style = 'accordion'
+
+    def get_site_menu(self):
+        print(urlresolvers.reverse('CustomHtml'), )
+        return ({'title': '报表管理', 'menus': ({'title': '报表管理', 'url': urlresolvers.reverse('CustomHtml')},),
+                 'icon': 'fa fa-table'},)
+
+        pass
 
 
+# 创建xadmin的最基本管理器配置，并与view绑定
+class BaseSetting(object):
+    # 开启主题功能
+    enable_themes = True
+    use_bootswatch = True
+
+
+# 将基本配置管理与view绑定
+xadmin.site.register(views.BaseAdminView, BaseSetting)
 xadmin.site.register(CommAdminView, GlobalSetting)

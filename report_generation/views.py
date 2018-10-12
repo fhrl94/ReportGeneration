@@ -1,21 +1,29 @@
 import copy
+import json
 import os
+import re
 import sys
 import time
 
 import xlrd
 import xlwt
+from django.apps import apps
+from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from django.db.models import Q
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 # Create your views here.
+from django.shortcuts import render
 from django.utils.http import urlquote
 from django.utils.translation import ugettext_lazy
+from django.views.decorators.csrf import csrf_exempt
+from django.views.generic.base import View
 
-from report_generation.models import EmployeesInfo
+from report_generation.models import EmployeesInfo, WorkbookInfo, SheetInfo, FilterColInfo
 from resource_python.data_pull import export_list_title, data_validation, export_list_column
 
 
-class SheetOptions():
+class SheetOptions:
     export_dict_title = {'姓名': 'name', '工号': 'code', '公司名称': 'company', '部门': 'department', '组别': 'group',
                          '性别': 'gender', '级别': 'level', '入职日期': 'entry_date', '离职日期': 'dimission_date',
                          '虚拟入职日期': 'division_date', '转正日期': 'emp_positive_date', '毕业院校': 'graduate_institutions',
@@ -305,3 +313,261 @@ def create_employees_info_ins(data_list):
     for index, column in enumerate(data_list):
         setattr(emp_ins, export_list_column[index]['db_name'], column)
     return emp_ins
+
+
+def get_model_field(app_name, model_name, exclude):
+    """
+    获取model的verbose_name和name的字段
+    """
+    model_obj = apps.get_model(app_name, model_name)
+    filed = model_obj._meta.fields
+    # print(filed)
+    field_dic = {}
+    if len(exclude):
+        params = [f for f in filed if f.name not in exclude]
+    else:
+        params = [f for f in filed if f.name]
+
+    for i in params:
+        field_dic[i.name] = i.verbose_name
+    return field_dic
+
+
+#  TODO 存在 CSRF 攻击
+class WorkbookInfoView(View):
+
+    # def get(self, request, id, *args, **kwargs):
+    #     # print(*args, **kwargs)
+    #     # print(**kwargs)
+    #     # print(get_model_field('report_generation', 'WorkbookInfo', ('ID', )))
+    #     # TODO 未使用
+    #     return JsonResponse(list(WorkbookInfo.objects.filter(pk=id).values()), safe=False)
+    #     pass
+
+    @login_required(login_url='/xadmin/login/')
+    def post(self, request, id, *args, **kwargs):
+        #  解析 model 模型数据
+        print(request.POST)
+        print(type(request.POST))
+        print((request.POST.dict()))
+        reg = r'^(.*)\[(.*)\]$'
+        # 新增,或修改
+        workbook_ins = WorkbookInfo()
+        for name, value in request.POST.items():
+            # TODO 数据验证
+            setattr(workbook_ins, re.search(reg, name).group(2), value)
+        workbook_ins.save()
+        return JsonResponse("succeed", safe=False)
+
+    pass
+
+    @login_required(login_url='/xadmin/login/')
+    def delete(self, request, id, *args, **kwargs):
+        #
+        # print(id)
+        WorkbookInfo.objects.filter(pk=id).delete()
+        return JsonResponse("succeed", safe=False)
+        pass
+
+    @csrf_exempt
+    def dispatch(self, *args, **kwargs):
+        return super(WorkbookInfoView, self).dispatch(*args, **kwargs)
+
+@login_required(login_url='/xadmin/login/')
+def workbook_info_view_list(request, page_index):
+    page = Paginator(WorkbookInfo.objects.values().order_by('-send_time'), 10)
+    workbook_info = {'page_count_max': 10, 'page_max': page.num_pages, 'page_index': page_index,
+                     'page_info': list(page.page(page_index)), }
+    return JsonResponse(workbook_info, safe=False)
+    pass
+
+
+#  TODO 存在 CSRF 攻击
+class SheetInfoView(View):
+
+    # def get(self, request, id, *args, **kwargs):
+    #     # print(*args, **kwargs)
+    #     # print(**kwargs)
+    #     # print(get_model_field('report_generation', 'WorkbookInfo', ('ID', )))
+    #     # TODO
+    #     return JsonResponse(list(SheetInfo.objects.filter(pk=id).values()), safe=False)
+    #     pass
+
+    @login_required(login_url='/xadmin/login/')
+    def post(self, request, id, *args, **kwargs):
+        #  解析 model 模型数据
+        # print(request.POST)
+        # print(type(request.POST))
+        # print((request.POST.dict()))
+        reg = r'^(.*)\[(.*)\]$'
+        # 新增,或修改
+        sheet_ins = SheetInfo()
+        for name, value in request.POST.items():
+            # TODO 数据验证
+            setattr(sheet_ins, re.search(reg, name).group(2), value)
+        sheet_ins.save()
+        return JsonResponse("succeed", safe=False)
+
+    pass
+
+    @login_required(login_url='/xadmin/login/')
+    def delete(self, request, id, *args, **kwargs):
+        #
+        # print(id)
+        SheetInfo.objects.filter(pk=id).delete()
+        return JsonResponse("succeed", safe=False)
+        pass
+
+    @csrf_exempt
+    def dispatch(self, *args, **kwargs):
+        return super(SheetInfoView, self).dispatch(*args, **kwargs)
+
+
+@login_required(login_url='/xadmin/login/')
+def sheet_info_view_list(request, page_index, id):
+    page = Paginator(SheetInfo.objects.filter(workbook_ins=id).values().order_by('id'), 10)
+    sheet_info = {'page_count_max': 10, 'page_max': page.num_pages, 'page_index': page_index,
+                  'page_info': list(page.page(page_index)), }
+    return JsonResponse(sheet_info, safe=False)
+    pass
+
+
+@login_required(login_url='/xadmin/login/')
+def get_column_title_list(request):
+    return JsonResponse(export_list_title, safe=False)
+    pass
+
+
+#  TODO 存在 CSRF 攻击
+class FilterColInfoView(View):
+
+    # def get(self, request, id, *args, **kwargs):
+    #     # print(*args, **kwargs)
+    #     # print(**kwargs)
+    #     # print(get_model_field('report_generation', 'WorkbookInfo', ('ID', )))
+    #     # TODO
+    #     return JsonResponse(list(SheetInfo.objects.filter(pk=id).values()), safe=False)
+    #     pass
+
+    @login_required(login_url='/xadmin/login/')
+    def post(self, request, id, *args, **kwargs):
+        #  解析 model 模型数据
+        print(request.POST)
+        print(type(request.POST))
+        print((request.POST.dict()))
+        reg = r'^(.*)\[(.*)\]$'
+        # 新增,或修改
+        filter_col_ins = FilterColInfo()
+        for name, value in request.POST.items():
+            # TODO 数据验证
+            setattr(filter_col_ins, re.search(reg, name).group(2), value)
+        filter_col_ins.save()
+        return JsonResponse("succeed", safe=False)
+
+    pass
+
+    @login_required(login_url='/xadmin/login/')
+    def delete(self, request, id, *args, **kwargs):
+        #
+        print(id)
+        FilterColInfo.objects.filter(pk=id).delete()
+        return JsonResponse("succeed", safe=False)
+        pass
+
+    @csrf_exempt
+    def dispatch(self, *args, **kwargs):
+        return super(FilterColInfoView, self).dispatch(*args, **kwargs)
+
+
+@login_required(login_url='/xadmin/login/')
+def filter_col_info_view_list(request, page_index, id):
+    page = Paginator(FilterColInfo.objects.filter(sheet_ins=id).values().order_by('id'), 10)
+    filter_col_info = {'page_count_max': 10, 'page_max': page.num_pages, 'page_index': page_index,
+                       'page_info': list(page.page(page_index)), }
+    return JsonResponse(filter_col_info, safe=False)
+    pass
+
+
+@login_required(login_url='/xadmin/login/')
+def get_column_condition_list(request, key):
+    column_title_dict = get_model_field('report_generation', 'EmployeesInfo', ('ID',))
+    if key in column_title_dict.values():
+        column = list(column_title_dict.keys())[list(column_title_dict.values()).index(key)]
+        distinct_result = []
+        for one in EmployeesInfo.objects.all().values_list(column).distinct():
+            for key in one:
+                distinct_result.append(key)
+        return JsonResponse(distinct_result, safe=False)
+    else:
+        return JsonResponse("fail", safe=False)
+    pass
+
+
+@login_required(login_url='/xadmin/login/')
+def download_custom(request, id):
+    clear_temp()
+    work_book_ins = WorkbookInfo.objects.filter(pk=id).get()
+    work_sheet_write_ins = WorkSheetWrite(work_book_ins.workbook_name)
+    for one_sheet_ins in SheetInfo.objects.filter(workbook_ins=work_book_ins.pk).all():
+        work_sheet_write_ins.title_name_write(one_sheet_ins.sheet_name, one_sheet_ins.column_name_list.split(','))
+        work_sheet_write_ins.title_data_write(one_sheet_ins.sheet_name,
+                                              get_col_filter_data(sheet_ins_id=one_sheet_ins.id,
+                                                                  column_name_list=one_sheet_ins.column_name_list.split(
+                                                                      ',')))
+        work_sheet_write_ins.save()
+    return download_file(sys.path[0] + '/report_generation/tmp/' + work_book_ins.workbook_name + '.xls',
+                         work_book_ins.workbook_name, 'xls')
+
+
+export_dict_title = {'姓名': 'name', '工号': 'code', '公司名称': 'company', '部门': 'department', '组别': 'group', '性别': 'gender',
+                     '级别': 'level', '入职日期': 'entry_date', '离职日期': 'dimission_date', '虚拟入职日期': 'division_date',
+                     '转正日期': 'emp_positive_date', '毕业院校': 'graduate_institutions', '学历': 'education_background',
+                     '专业': 'emp_profession', '毕业时间': 'graduate_date', '岗位': 'emp_position', '出生年月': 'birth_date',
+                     '身份证号': 'id_card_num', '联系方式': 'emp_tel', '员工状态': 'emp_status', '月份': 'mouth_mun',
+                     '入职时长': 'time_of_entry', }
+
+filter_relation_dict = {'>': '__gt', '>=': '__gte', '<': '__lt', '<=': '__lte', '=': '', 'is Null': '__isnull',
+                        'like': '__icontains', 'not like': '__icontains', }
+
+
+@login_required(login_url='/admin/login/')
+def get_col_filter_data(sheet_ins_id, column_name_list):
+    filter_col_ins_list = FilterColInfo.objects.filter(sheet_ins=sheet_ins_id).all()
+    filter_list = Q()
+    for filter_col_ins in filter_col_ins_list:
+        # print(filter_col_ins.filter_col, filter_col_ins.filter_relation, filter_col_ins.condition_list)
+        parameter = export_dict_title[filter_col_ins.filter_col] + filter_relation_dict[filter_col_ins.filter_relation]
+        filter_list_tmp = Q()
+        if 'not' not in filter_col_ins.filter_relation:
+            # print(type(json.loads(filter_col_ins.condition_list)))
+            if isinstance(json.loads(filter_col_ins.condition_list), list):
+                for one in json.loads(filter_col_ins.condition_list):
+                    filter_list_tmp = filter_list_tmp | Q(**{parameter: str(one)})
+            else:
+                filter_list_tmp = filter_list_tmp | Q(**{parameter: json.loads(filter_col_ins.condition_list)})
+        elif 'not' in filter_col_ins.filter_relation:
+            if isinstance(json.loads(filter_col_ins.condition_list), list):
+                for one in json.loads(filter_col_ins.condition_list):
+                    filter_list_tmp = filter_list_tmp & ~Q(**{parameter: str(one)})
+            else:
+                filter_list_tmp = filter_list_tmp & ~Q(**{parameter: json.loads(filter_col_ins.condition_list)})
+        else:
+            raise UserWarning('FilterRelation 类格式错误')
+        filter_list = filter_list & filter_list_tmp
+    sheet_title_name_list = []
+    for one in column_name_list:
+        sheet_title_name_list.append(export_dict_title[one])
+    # print(sheet_title_name_list)
+    # print(EmployeesInfo.objects.filter(filter_list).values_list(*sheet_title_name_list))
+    # sheet_data_list = [self.sheet_title_name, ]
+    # for one in EmployeesInfo.objects.filter(filter_list).values(*sheet_title_name_list):
+    #     sheet_data_list.append(one)
+    print(filter_list)
+    return EmployeesInfo.objects.filter(filter_list).values_list(*sheet_title_name_list)
+    pass
+
+@login_required(login_url='/admin/login')
+def index_custom(request):
+
+    return render(request, template_name="index.html")
+    pass
