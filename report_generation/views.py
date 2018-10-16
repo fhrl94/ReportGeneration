@@ -344,7 +344,6 @@ class WorkbookInfoView(View):
     #     return JsonResponse(list(WorkbookInfo.objects.filter(pk=id).values()), safe=False)
     #     pass
 
-    @login_required(login_url='/xadmin/login/')
     def post(self, request, id, *args, **kwargs):
         #  解析 model 模型数据
         print(request.POST)
@@ -361,7 +360,6 @@ class WorkbookInfoView(View):
 
     pass
 
-    @login_required(login_url='/xadmin/login/')
     def delete(self, request, id, *args, **kwargs):
         #
         # print(id)
@@ -369,6 +367,7 @@ class WorkbookInfoView(View):
         return JsonResponse("succeed", safe=False)
         pass
 
+    @login_required(login_url='/xadmin/login/')
     @csrf_exempt
     def dispatch(self, *args, **kwargs):
         return super(WorkbookInfoView, self).dispatch(*args, **kwargs)
@@ -393,7 +392,6 @@ class SheetInfoView(View):
     #     return JsonResponse(list(SheetInfo.objects.filter(pk=id).values()), safe=False)
     #     pass
 
-    @login_required(login_url='/xadmin/login/')
     def post(self, request, id, *args, **kwargs):
         #  解析 model 模型数据
         # print(request.POST)
@@ -410,7 +408,6 @@ class SheetInfoView(View):
 
     pass
 
-    @login_required(login_url='/xadmin/login/')
     def delete(self, request, id, *args, **kwargs):
         #
         # print(id)
@@ -418,6 +415,7 @@ class SheetInfoView(View):
         return JsonResponse("succeed", safe=False)
         pass
 
+    @login_required(login_url='/xadmin/login/')
     @csrf_exempt
     def dispatch(self, *args, **kwargs):
         return super(SheetInfoView, self).dispatch(*args, **kwargs)
@@ -449,7 +447,6 @@ class FilterColInfoView(View):
     #     return JsonResponse(list(SheetInfo.objects.filter(pk=id).values()), safe=False)
     #     pass
 
-    @login_required(login_url='/xadmin/login/')
     def post(self, request, id, *args, **kwargs):
         #  解析 model 模型数据
         print(request.POST)
@@ -466,7 +463,6 @@ class FilterColInfoView(View):
 
     pass
 
-    @login_required(login_url='/xadmin/login/')
     def delete(self, request, id, *args, **kwargs):
         #
         print(id)
@@ -474,6 +470,7 @@ class FilterColInfoView(View):
         return JsonResponse("succeed", safe=False)
         pass
 
+    @login_required(login_url='/xadmin/login/')
     @csrf_exempt
     def dispatch(self, *args, **kwargs):
         return super(FilterColInfoView, self).dispatch(*args, **kwargs)
