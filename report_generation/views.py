@@ -528,7 +528,6 @@ filter_relation_dict = {'>': '__gt', '>=': '__gte', '<': '__lt', '<=': '__lte', 
                         'like': '__icontains', 'not like': '__icontains', }
 
 
-@login_required(login_url='/admin/login/')
 def get_col_filter_data(sheet_ins_id, column_name_list):
     filter_col_ins_list = FilterColInfo.objects.filter(sheet_ins=sheet_ins_id).all()
     filter_list = Q()
