@@ -14,6 +14,7 @@ from django.db.models import Q
 from django.http import HttpResponse, JsonResponse
 # Create your views here.
 from django.shortcuts import render
+from django.utils.decorators import method_decorator
 from django.utils.http import urlquote
 from django.utils.translation import ugettext_lazy
 from django.views.decorators.csrf import csrf_exempt
@@ -367,7 +368,7 @@ class WorkbookInfoView(View):
         return JsonResponse("succeed", safe=False)
         pass
 
-    @login_required(login_url='/xadmin/login/')
+    @method_decorator(login_required(login_url='/xadmin/login/'))
     @csrf_exempt
     def dispatch(self, *args, **kwargs):
         return super(WorkbookInfoView, self).dispatch(*args, **kwargs)
@@ -415,7 +416,7 @@ class SheetInfoView(View):
         return JsonResponse("succeed", safe=False)
         pass
 
-    @login_required(login_url='/xadmin/login/')
+    @method_decorator(login_required(login_url='/xadmin/login/'))
     @csrf_exempt
     def dispatch(self, *args, **kwargs):
         return super(SheetInfoView, self).dispatch(*args, **kwargs)
@@ -470,7 +471,7 @@ class FilterColInfoView(View):
         return JsonResponse("succeed", safe=False)
         pass
 
-    @login_required(login_url='/xadmin/login/')
+    @method_decorator(login_required(login_url='/xadmin/login/'))
     @csrf_exempt
     def dispatch(self, *args, **kwargs):
         return super(FilterColInfoView, self).dispatch(*args, **kwargs)
