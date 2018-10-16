@@ -6,10 +6,9 @@ import os
 
 import datetime
 
-import win32api
 from collections import Counter
 
-import win32con
+
 import xlrd
 import xlwt
 
@@ -199,6 +198,8 @@ def read_excel_files(filename_list):
         print(file)
         workbook = xlrd.open_workbook(filename=file)
         if not len(workbook.sheet_names()):
+            import win32api
+            import win32con
             win32api.MessageBox(0, "花名册【{file}】没有sheet，请查看".format(file=file), "报表数据源文件生成", win32con.MB_OK)
             quit(0)
         for sheet_index, sheet_name in enumerate(workbook.sheet_names()):
@@ -345,6 +346,8 @@ def repetition_check():
 
 
 if __name__ == '__main__':
+    import win32api
+    import win32con
     win32api.MessageBox(0, '请将所有花名册放到当前文件夹', "报表数据源文件生成", win32con.MB_OK)
     # 防止因为打包为 exe 文件，路径定位错误
     path = sys.path[0]
