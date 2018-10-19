@@ -368,12 +368,12 @@ class WorkbookInfoView(View):
         return JsonResponse("succeed", safe=False)
         pass
 
-    @method_decorator(login_required(login_url='/xadmin/login/'))
+    @method_decorator(login_required(login_url='/admin/login/'))
     @csrf_exempt
     def dispatch(self, *args, **kwargs):
         return super(WorkbookInfoView, self).dispatch(*args, **kwargs)
 
-@login_required(login_url='/xadmin/login/')
+@login_required(login_url='/admin/login/')
 def workbook_info_view_list(request, page_index):
     page = Paginator(WorkbookInfo.objects.values().order_by('-send_time'), 10)
     workbook_info = {'page_count_max': 10, 'page_max': page.num_pages, 'page_index': page_index,
@@ -416,13 +416,13 @@ class SheetInfoView(View):
         return JsonResponse("succeed", safe=False)
         pass
 
-    @method_decorator(login_required(login_url='/xadmin/login/'))
+    @method_decorator(login_required(login_url='/admin/login/'))
     @csrf_exempt
     def dispatch(self, *args, **kwargs):
         return super(SheetInfoView, self).dispatch(*args, **kwargs)
 
 
-@login_required(login_url='/xadmin/login/')
+@login_required(login_url='/admin/login/')
 def sheet_info_view_list(request, page_index, id):
     page = Paginator(SheetInfo.objects.filter(workbook_ins=id).values().order_by('id'), 10)
     sheet_info = {'page_count_max': 10, 'page_max': page.num_pages, 'page_index': page_index,
@@ -431,7 +431,7 @@ def sheet_info_view_list(request, page_index, id):
     pass
 
 
-@login_required(login_url='/xadmin/login/')
+@login_required(login_url='/admin/login/')
 def get_column_title_list(request):
     return JsonResponse(export_list_title, safe=False)
     pass
@@ -471,13 +471,13 @@ class FilterColInfoView(View):
         return JsonResponse("succeed", safe=False)
         pass
 
-    @method_decorator(login_required(login_url='/xadmin/login/'))
+    @method_decorator(login_required(login_url='/admin/login/'))
     @csrf_exempt
     def dispatch(self, *args, **kwargs):
         return super(FilterColInfoView, self).dispatch(*args, **kwargs)
 
 
-@login_required(login_url='/xadmin/login/')
+@login_required(login_url='/admin/login/')
 def filter_col_info_view_list(request, page_index, id):
     page = Paginator(FilterColInfo.objects.filter(sheet_ins=id).values().order_by('id'), 10)
     filter_col_info = {'page_count_max': 10, 'page_max': page.num_pages, 'page_index': page_index,
@@ -486,7 +486,7 @@ def filter_col_info_view_list(request, page_index, id):
     pass
 
 
-@login_required(login_url='/xadmin/login/')
+@login_required(login_url='/admin/login/')
 def get_column_condition_list(request, key):
     column_title_dict = get_model_field('report_generation', 'EmployeesInfo', ('ID',))
     if key in column_title_dict.values():
@@ -501,7 +501,7 @@ def get_column_condition_list(request, key):
     pass
 
 
-@login_required(login_url='/xadmin/login/')
+@login_required(login_url='/admin/login/')
 def download_custom(request, id):
     clear_temp()
     work_book_ins = WorkbookInfo.objects.filter(pk=id).get()

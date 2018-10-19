@@ -229,7 +229,7 @@ actions_config = [
              {'sheet_name': '休假',
               'title_name_list': ['姓名', '部门', '组别', '性别', '级别', '入职日期', '转正日期', '毕业院校', '学历', '专业', '毕业时间', ],
               'col_filter':
-                  {'公司名称': {FilterRelation().equal_to: ('百捷集团', '百度推广', '信息科技', '盛世百捷')},
+                  {'公司名称': {FilterRelation().equal_to: ('百度推广', )},
                    '部门': {FilterRelation().equal_to: ('运营增值部', '百度本地广告事业部', '地市拓展部', '业务运营部',
                                                       '运营支持中心', )},
                    '员工状态': {FilterRelation().equal_to: ('休假',)},
@@ -238,7 +238,7 @@ actions_config = [
              {'sheet_name': '离职',
               'title_name_list': ['姓名', '部门', '组别', '性别', '级别', '入职日期', '离职日期', ],
               'col_filter':
-                  {'公司名称': {FilterRelation().equal_to: ('百捷集团', '百度推广', '信息科技', '盛世百捷')},
+                  {'公司名称': {FilterRelation().equal_to: ('百度推广', )},
                    '部门': {FilterRelation().equal_to: ('运营增值部', '百度本地广告事业部', '地市拓展部', '业务运营部',
                                                       '运营支持中心', )},
                    '员工状态': {FilterRelation().equal_to: ('离职',)},
