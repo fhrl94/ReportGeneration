@@ -52,8 +52,11 @@ class EmployeeInfoAdmin(object):
                     'division_date', 'emp_positive_date', 'graduate_institutions', 'education_background',
                     'emp_profession', 'graduate_date', 'emp_position', 'birth_date', 'id_card_num', 'emp_tel',
                     'emp_status',)
-    list_filter = ('company', 'department', 'emp_status', 'dimission_date', 'entry_date', 'birth_date')
-    search_fields = ('name', 'code',)
+    list_filter = ('company', 'department', 'group', 'gender', 'level', 'entry_date', 'dimission_date',
+                    'division_date', 'emp_positive_date', 'graduate_institutions', 'education_background',
+                    'emp_profession', 'graduate_date', 'emp_position', 'birth_date', 'id_card_num', 'emp_tel',
+                    'emp_status',)
+    search_fields = ('name', 'code', 'id_card_num', 'emp_tel')
     ordering = ('code',)
     actions = get_actions()  # actions = [avs,]
     model_icon = 'fa fa-book'
