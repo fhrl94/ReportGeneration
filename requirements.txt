@@ -20,7 +20,7 @@ PyYAML==5.3.1
 requests==2.20.1
 six==1.15.0
 tablib==2.0.0
-urllib3==1.24.3
+urllib3==1.26.5
 wincertstore==0.2
 xadmin @ git+git://github.com/sshwsfc/xadmin.git@291b63bad248a3958f8cdfbac63bd9bc54028e9b
 xlrd==1.2.0
